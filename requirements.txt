@@ -6,3 +6,5 @@ fastapi
 uvicorn
 joblib
 dvc
+streamlit
+requests
