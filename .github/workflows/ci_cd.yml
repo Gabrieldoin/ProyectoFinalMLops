@@ -17,9 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up DVC
-        uses: iterative/setup-dvc@v1
-
       - name: Pull dataset from DVC
         run: dvc pull
 
