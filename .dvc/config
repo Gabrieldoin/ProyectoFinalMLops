@@ -1,0 +1,3 @@
+['remote "proyectofinalmlops4"']
+    url = s3://sga-mlops-bucket
+    region = us-east-2

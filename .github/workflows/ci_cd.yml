@@ -11,25 +11,38 @@ on:
 jobs:
   retraining_model:
     runs-on: ubuntu-latest
-    container: docker://dvcorg/cml:latest
     env:
       repo_token: ${{ secrets.GITHUBTOKEN }}
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js (for CML)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install DVC
+        run: pip install dvc
+
+      - name: Pull data from DVC
+        run: dvc pull
 
       - name: Upgrade pip
         run: pip install --upgrade pip
 
-      - name: Install requirements
+      - name: Install project requirements
         run: pip3 install -r requirements.txt
 
       - name: Execute the training model
         run: python3 src/train_model.py
 
-      - name: Generating report
+      - name: Generate report and comment with CML
         run: |
           echo "## Model metrics" > report.md
           echo "Model trained successfully with RandomForest." >> report.md
+          npm install -g @dvcorg/cml
           cml comment create report.md
 
   build_docker_image:
@@ -50,11 +63,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            docker stop $(docker ps -q --filter "publish=8000") || true
-            docker rm $(docker ps -aq --filter "publish=8000") || true
+            docker stop supplement-api || true
+            docker rm supplement-api || true
             docker login -u '${{ secrets.DOCKER_USERNAME }}' -p '${{ secrets.DOCKER_PASSWORD }}'
             docker pull gabrieldoin/supplement-api:dev
             docker run -d --name supplement-api -p 8000:8000 gabrieldoin/supplement-api:dev
-          
-
-#aaa
