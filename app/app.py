@@ -7,20 +7,22 @@ st.title("📦 Predicción de Devoluciones de Producto")
 
 st.markdown("Complete la información del producto para predecir si será devuelto.")
 
+# Inputs de usuario
 product = st.text_input("Nombre del producto")
 category = st.selectbox("Categoría", ["Omega", "Vitamin", "Protein", "Other"])
 units = st.number_input("Unidades vendidas", min_value=0, step=1)
 price = st.number_input("Precio", step=0.01)
 revenue = st.number_input("Ingresos", step=0.01)
-discount = st.slider("Descuento aplicado", 0.0, 1.0, 0.01)
+discount = st.slider("Descuento aplicado", 0.0, 1.0, 0.01)  # Cambio aquí para que puedas mover en pasos de 0.01
 location = st.selectbox("Ubicación", ["USA", "Canada", "Mexico"])
 platform = st.selectbox("Plataforma", ["Amazon", "eBay", "Shopify"])
 
 if st.button("🔍 Predecir"):
+    # Muy importante: usamos ESPACIOS, como la API espera
     data = {
-        "Product_Name": product,
+        "Product Name": product,
         "Category": category,
-        "Units_Sold": units,
+        "Units Sold": units,
         "Price": price,
         "Revenue": revenue,
         "Discount": discount,
