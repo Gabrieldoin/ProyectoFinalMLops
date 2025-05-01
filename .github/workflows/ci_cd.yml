@@ -43,10 +43,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Optional: test pulling the image to ensure it exists and is accessible
-      - name: Test Docker pull
-        run: docker pull gabrieldoin/supplement-api
-
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
