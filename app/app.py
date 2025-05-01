@@ -18,9 +18,9 @@ platform = st.selectbox("Plataforma", ["Amazon", "eBay", "Shopify"])
 
 if st.button("🔍 Predecir"):
     data = {
-        "Product Name": product,
+        "Product_Name": product,
         "Category": category,
-        "Units Sold": units,
+        "Units_Sold": units,
         "Price": price,
         "Revenue": revenue,
         "Discount": discount,
@@ -28,10 +28,15 @@ if st.button("🔍 Predecir"):
         "Platform": platform
     }
 
+    headers = {"Content-Type": "application/json"}
+
     try:
-        response = requests.post("http://localhost:8000/predict", json=data)
-        result = response.json()
-        st.success(f"🔮 Resultado: {'Será devuelto' if result['prediction'] else 'No será devuelto'}")
-        st.write(f"📊 Probabilidad de devolución: {round(result['probability_of_return'] * 100, 2)}%")
-    except:
-        st.error("❌ Error al conectarse con la API.")
+        response = requests.post("http://localhost:8000/predict", json=data, headers=headers)
+        if response.status_code == 200:
+            result = response.json()
+            st.success(f"🔮 Resultado: {'Será devuelto' if result['prediction'] else 'No será devuelto'}")
+            st.write(f"📊 Probabilidad de devolución: {round(result['probability_of_return'] * 100, 2)}%")
+        else:
+            st.error(f"❌ Error en la respuesta de la API: {response.status_code}")
+    except Exception as e:
+        st.error(f"❌ Error al conectarse con la API: {e}")
