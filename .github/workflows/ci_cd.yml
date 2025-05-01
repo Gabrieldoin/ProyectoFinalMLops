@@ -37,20 +37,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check the repo
-        uses: actions/checkout@v2
-
-      - name: Login to dockerhub
+      - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/supplement-api:dev .
-
-      - name: Docker push to Dockerhub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/supplement-api:dev
+      # Optional: test pulling the image to ensure it exists and is accessible
+      - name: Test Docker pull
+        run: docker pull gabrieldoin/supplement-api
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
@@ -64,6 +59,5 @@ jobs:
               docker stop supplement-api
               docker rm supplement-api
             fi
-            docker pull ${{ secrets.DOCKER_USERNAME }}/supplement-api:dev
-            docker run -d --name supplement-api -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/supplement-api:dev
-
+            docker pull gabrieldoin/supplement-api
+            docker run -d --name supplement-api -p 8000:8000 gabrieldoin/supplement-api
