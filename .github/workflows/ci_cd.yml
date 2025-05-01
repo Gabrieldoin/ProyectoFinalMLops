@@ -11,13 +11,17 @@ on:
 jobs:
   retraining_model:
     runs-on: ubuntu-latest
-    container: docker://dvcorg/cml:latest
     env:
       repo_token: ${{ secrets.GITHUBTOKEN }}
-    steps:
-      - uses: actions/checkout@v2
 
-      - name: Pull dataset from DVC
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install DVC
+        run: pip install dvc
+
+      - name: Pull data from DVC
         run: dvc pull
 
       - name: Upgrade pip
@@ -29,10 +33,11 @@ jobs:
       - name: Execute the training model
         run: python3 src/train_model.py
 
-      - name: Generating report
+      - name: Generate report
         run: |
           echo "## Model metrics" > report.md
           echo "Model trained successfully with RandomForest." >> report.md
+          pip install cml
           cml comment create report.md
 
   build_docker_image:
@@ -58,6 +63,3 @@ jobs:
             docker login -u '${{ secrets.DOCKER_USERNAME }}' -p '${{ secrets.DOCKER_PASSWORD }}'
             docker pull gabrieldoin/supplement-api:dev
             docker run -d --name supplement-api -p 8000:8000 gabrieldoin/supplement-api:dev
-            
-
-#aaaa
