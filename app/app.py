@@ -12,7 +12,7 @@ category = st.selectbox("Categoría", ["Omega", "Vitamin", "Protein", "Other"])
 units = st.number_input("Unidades vendidas", min_value=0, step=1)
 price = st.number_input("Precio", step=0.01)
 revenue = st.number_input("Ingresos", step=0.01)
-discount = st.slider("Descuento aplicado", 0.0, 1.0, 0.05)
+discount = st.slider("Descuento aplicado", 0.0, 1.0, 0.01)
 location = st.selectbox("Ubicación", ["USA", "Canada", "Mexico"])
 platform = st.selectbox("Plataforma", ["Amazon", "eBay", "Shopify"])
 
