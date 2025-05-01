@@ -18,6 +18,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Install Node.js (for CML)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
       - name: Install DVC
         run: pip install dvc
 
@@ -27,17 +32,17 @@ jobs:
       - name: Upgrade pip
         run: pip install --upgrade pip
 
-      - name: Install requirements
+      - name: Install project requirements
         run: pip3 install -r requirements.txt
 
       - name: Execute the training model
         run: python3 src/train_model.py
 
-      - name: Generate report
+      - name: Generate report and comment with CML
         run: |
           echo "## Model metrics" > report.md
           echo "Model trained successfully with RandomForest." >> report.md
-          pip install cml
+          npm install -g @dvcorg/cml
           cml comment create report.md
 
   build_docker_image:
