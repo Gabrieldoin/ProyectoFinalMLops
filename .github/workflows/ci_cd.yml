@@ -50,11 +50,11 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            docker stop $(docker ps -q --filter "publish=8000") || true
+            docker rm $(docker ps -aq --filter "publish=8000") || true
             docker login -u '${{ secrets.DOCKER_USERNAME }}' -p '${{ secrets.DOCKER_PASSWORD }}'
-            if docker ps --all | grep supplement-api; then
-              docker stop supplement-api
-              docker rm supplement-api
-            fi
             docker pull gabrieldoin/supplement-api:dev
             docker run -d --name supplement-api -p 8000:8000 gabrieldoin/supplement-api:dev
-#aa
+          
+
+#aaa
