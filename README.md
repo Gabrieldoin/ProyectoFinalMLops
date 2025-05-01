@@ -88,6 +88,4 @@ Branches utilizados:
 
 ---
 
-**Repositorio público:** [enlace aquí]\
-**Dirección del API en la nube:** [IP o DNS aquí]
 
