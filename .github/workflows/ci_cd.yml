@@ -17,6 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Set up DVC
+        uses: iterative/setup-dvc@v1
+
+      - name: Pull dataset from DVC
+        run: dvc pull
+
       - name: Upgrade pip
         run: pip install --upgrade pip
 
@@ -55,6 +61,6 @@ jobs:
             docker login -u '${{ secrets.DOCKER_USERNAME }}' -p '${{ secrets.DOCKER_PASSWORD }}'
             docker pull gabrieldoin/supplement-api:dev
             docker run -d --name supplement-api -p 8000:8000 gabrieldoin/supplement-api:dev
-          
+            
 
-#aaa
+#aaaa
